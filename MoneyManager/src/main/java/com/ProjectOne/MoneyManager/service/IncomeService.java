@@ -10,6 +10,7 @@ import com.ProjectOne.MoneyManager.repository.CategoryRepository;
 import com.ProjectOne.MoneyManager.repository.IncomeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -49,11 +50,13 @@ public class IncomeService {
         return IncomeDTO.builder()
                 .id(entity.getId())
                 .icon(entity.getIcon())
+                .name(entity.getName())
                 .categoryId(entity.getCategoryEntity() != null ? entity.getCategoryEntity().getId() : null)
                 .categoryName(entity.getCategoryEntity() != null ? entity.getCategoryEntity().getName() : "N/A")
                 .date(entity.getDate())
                 .createdAt(entity.getCreateAt())
                 .updatedAt(entity.getUpdateAt())
+                .amount(entity.getAmount())
                 .build();
     }
 
@@ -96,9 +99,22 @@ public class IncomeService {
     }
 
     //Lấy về tổng tiền thu
-    public BigDecimal getTotalExpenses(){
+    public BigDecimal getTotalIncome(){
         ProfileEntity profile = profileService.getCurrentProfile();
         BigDecimal total = incomeRepository.findTotalIncomeByProfileEntity_Id(profile.getId());
         return total != null ? total : BigDecimal.ZERO;
+    }
+
+    //Lọc khoản thu
+    public List<IncomeDTO> filterIncome(LocalDate startDate, LocalDate endDate, String keyWord, Sort sort){
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<IncomeEntity> list = incomeRepository.findByProfileEntity_IdAndDateBetweenAndNameContainingIgnoreCase(
+                profile.getId(),
+                startDate,
+                endDate,
+                keyWord,
+                sort
+        );
+        return list.stream().map(this::toDTO).toList();
     }
 }

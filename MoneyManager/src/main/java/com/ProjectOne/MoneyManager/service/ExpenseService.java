@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.apache.poi.ss.usermodel.ExcelNumberFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -52,6 +53,8 @@ public class ExpenseService {
         return ExpenseDTO.builder()
                 .id(entity.getId())
                 .icon(entity.getIcon())
+                .name(entity.getName())
+                .amount(entity.getAmount())
                 .categoryId(entity.getCategoryEntity() != null ? entity.getCategoryEntity().getId() : null)
                 .categoryName(entity.getCategoryEntity() != null ? entity.getCategoryEntity().getName() : "N/A")
                 .date(entity.getDate())
@@ -104,4 +107,24 @@ public class ExpenseService {
         BigDecimal total = expenseRepository.findTotalExpenseByProfileEntity_Id(profile.getId());
         return total != null ? total : BigDecimal.ZERO;
     }
+
+    //Lọc khoản chi
+    public List<ExpenseDTO> filterExpense(LocalDate startDate, LocalDate endDate, String keyWord, Sort sort){
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<ExpenseEntity> list = expenseRepository.findByProfileEntity_IdAndDateBetweenAndNameContainingIgnoreCase(profile.getId(),
+                startDate,
+                endDate,
+                keyWord,
+                sort);
+        return list.stream().map(this::toDTO).toList();
+    }
+
+
+    //Lấy danh sách các khoản chi tiêu của một user trong một ngày cụ thể.
+    public List<ExpenseDTO> getExpensesForUserOnDate(Long id, LocalDate date){
+        List<ExpenseEntity> list = expenseRepository.findByProfileEntity_IdAndDate(id,date);
+        return list.stream().map(this::toDTO).toList();
+    }
+
+
 }

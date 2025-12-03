@@ -4,6 +4,7 @@ package com.ProjectOne.MoneyManager.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmailService {
 
-    final JavaMailSender javaMailSender;
+    @Autowired
+    JavaMailSender javaMailSender;
 
     @Value("${spring.mail.properties.mail.smtp.from}")
     String fromEmail;

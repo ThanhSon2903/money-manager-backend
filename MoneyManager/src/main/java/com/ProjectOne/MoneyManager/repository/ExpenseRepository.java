@@ -37,7 +37,7 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity,Long> {
 
     /*
     name like concat(?4,'%'),('%',?4,'%'),('%',?4)
-        select * from tbl_expenses where profileEntity_Id = ?1 and date between ?2 and ?3 and name like %?4%
+        select * from tbl_expenses where profileEntity_Id = :profileId and date between ?startDate and ?endDate and Lower(name) like lower(%?4%)
         Lấy ra tổng chi tiêu dựa vào Id và tìm khiếm trong khoảng [startDate,endDate] và có name nằm ở bất kỳ đâu trong chuỗi
      */
     List<ExpenseEntity> findByProfileEntity_IdAndDateBetweenAndNameContainingIgnoreCase(
@@ -54,4 +54,7 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity,Long> {
     select * from tbl_expense where profileEntity_Id = ?1 and date between ?2 and ?3
      */
     List<ExpenseEntity> findByProfileEntity_IdAndDateBetween(Long profileId, LocalDate startDate, LocalDate endDate);
+
+    //select * from tbl_expense where profileEntity_Id = ?1 and date ?2
+    List<ExpenseEntity> findByProfileEntity_IdAndDate(Long profileId,LocalDate date);
 }
