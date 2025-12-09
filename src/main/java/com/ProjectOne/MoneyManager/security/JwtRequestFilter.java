@@ -36,6 +36,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+        if(path.equals("/api/v1.0/register") || path.equals("/api/v1.0/login")
+                || path.equals("/status") || path.equals("/health")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         //kiểm tra và xác thực JWT
         final String authHeader = request.getHeader("Authorization");
         String jwtToken;
