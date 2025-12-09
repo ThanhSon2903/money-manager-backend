@@ -1,0 +1,12 @@
+
+#PostgreSQL config
+spring:
+  datasource:
+    url: "jdbc:postgresql://dpg-d4oluts9c44c73fj4dug-a.singapore-postgres.render.com/moneymanager_1ryc"
+    username: moneymanager_1ryc_user
+    password: XDQ9QkjZCIeF59abVwt0jgXh1EqhDzrU
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

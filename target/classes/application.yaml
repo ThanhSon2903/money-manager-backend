@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1.0
+
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/moneymanager"
+    username: root
+    password: root
+
+  mail:
+    host: smtp-relay.brevo.com
+    port: 587
+    username: "9a35d1001@smtp-brevo.com" #Login
+    password: "xsmtpsib-af59bb645f545a283b51c229a24916ccc2e8ee18db29f3eb1e703c8e6b98ebfb-J6ATffQ1J23fG5Ss" #SMTP Key
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          from: "thanhnguyensonjqk@gmail.com"
+      protocol: smtp
+
+  profiles:
+    active: prod #bỏ qua môi trường dev, dùng môi trường prod,tách biệt config local/test/prod
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+money:
+  manager:
+    frontend:
+      url: ${MONEY_MANAGER_FRONTEND_URL}
+
+app:
+  activation:
+    url: ${MONEY_MANAGER_BACKEND_URL}
+
