@@ -32,10 +32,15 @@ public class ProfileEntity {
 
     @UpdateTimestamp
     LocalDateTime updatedAt;
-    Boolean isActive;
+
+    @Builder.Default
+    @Column(nullable = false)
+    Boolean isActive = false;
+
     String activationToken;//mã kích hoạt
 
-    @PrePersist //Annotation được gọi trước khi 1 obj được lưu vào DB
+    @PrePersist
+    @PreUpdate //Annotation được gọi trước khi 1 obj được lưu vào DB
     public void prePersist(){
         if(this.isActive == null){
             isActive = false;
